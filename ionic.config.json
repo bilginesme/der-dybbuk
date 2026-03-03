@@ -1,0 +1,7 @@
+{
+  "name": "der-dybbuk",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
