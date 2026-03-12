@@ -1,6 +1,6 @@
 // managers/LevelManager.ts
 import * as Phaser from 'phaser';
-import { LEVEL_MANIFEST, LevelData, LevelPhase } from '../types/LevelConfig';
+import { LEVEL_MANIFEST, LevelData } from '../types/LevelConfig';
 import { PlayerData } from './PlayerData'; // We'll make this next
 
 export class LevelManager {

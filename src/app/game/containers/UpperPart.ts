@@ -3,6 +3,7 @@ import { DTC } from '../../DTC';
 import { Moon } from '../sprites/Moon';
 import Clouds from './Clouds';
 import { Mist } from './Mist';
+import { ObjectiveSlot } from '../types/LevelConfig';
 
 export default class UpperPart extends Phaser.GameObjects.Container {
     private dtc: DTC = new DTC();
@@ -10,6 +11,8 @@ export default class UpperPart extends Phaser.GameObjects.Container {
     private mist:Mist;
     private moon:Moon;
     private scenery!:Phaser.GameObjects.Image;
+    private imgObjectives:Phaser.GameObjects.Image[] = [];
+    private readonly alphaGhost:number = 0.85;
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y);
@@ -30,5 +33,43 @@ export default class UpperPart extends Phaser.GameObjects.Container {
 
         this.mist = new Mist(scene, 150, 150, 2.5);
         this.add(this.mist);
+    }
+
+    public initializeItems(objectives:ObjectiveSlot[]): void {
+        console.log('Initialize Items');
+        console.log(objectives);
+
+        let startX = 70;
+        let startY = 280;
+        
+        for(let i:number=0; i < objectives.length; i++) {
+            let x:number = startX + i * 90;
+            let y:number = startY;
+            let frameNo = 2;     
+            const img = this.scene.add.image(x, y, 'items-atlas', frameNo)
+                .setScale(0.40)
+                .setOrigin(0.5, 1.0)
+                .setAlpha(this.alphaGhost)
+                .setTint(0x888888)
+                .setInteractive();
+
+            this.scene.tweens.add({
+                targets: img,
+                y: '+=10',
+                duration: 2000,
+                yoyo: true,
+                repeat: -1,
+                ease: 'Sine.easeInOut'
+            });
+
+            this.imgObjectives.push(img);
+            this.add(img);
+        }
+        
+    }
+
+    public newItemAcquired(newItem:string): void {
+        console.log('New Item Acquired: ' + newItem);
+
     }
 }

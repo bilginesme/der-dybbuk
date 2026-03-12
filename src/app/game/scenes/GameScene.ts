@@ -3,7 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DTC } from '../../DTC';
 import { AudioManager } from '../managers/AudioManager';
 import { LevelManager } from '../managers/LevelManager';
-import { LEVEL_MANIFEST, LevelData } from '../types/LevelConfig';
+import { LEVEL_MANIFEST, LevelData, ObjectiveSlot } from '../types/LevelConfig';
 import UpperPart from '../containers/UpperPart';
 import Board from '../containers/Board';
 import PlayCards from '../containers/Playcards';
@@ -69,6 +69,9 @@ export class GameScene extends Phaser.Scene {
         this.board.on('restart-game', () => {
             console.log('Restart game...');
             this.restartGame();
+        });
+        this.board.on('test-action-from-board', () => {
+            this.upperPart.newItemAcquired('key');
         });
 
         this.playCards = new PlayCards(this, 0, 2386, this.audioManager);
@@ -225,5 +228,10 @@ export class GameScene extends Phaser.Scene {
             this.scene.restart({ levelId: this.currentLevelId });
         }
         
+    }
+
+    public initializeItemsOnUpperPart(): void {
+        let objectives:ObjectiveSlot[] = LEVEL_MANIFEST[this.currentLevelId - 1].objectives;
+        this.upperPart.initializeItems(objectives);
     }
 }
