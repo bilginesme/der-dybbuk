@@ -42,7 +42,10 @@ export default class UpperPart extends Phaser.GameObjects.Container {
         });
         this.add(this.cornerLeft);
 
-        this.cornerRight = scene.add.image(1260, 0, 'corner-right').setOrigin(1, 0);
+        this.cornerRight = scene.add.image(1260, 0, 'corner-right').setOrigin(1, 0).setInteractive();
+        this.cornerRight.on('pointerdown', () => {
+            this.emit('test-action-from-board');
+        });
         this.add(this.cornerRight);
 
         this.gemLeft = scene.add.sprite(90, 90, 'gem-green').setOrigin(0.5, 0.5);
@@ -67,6 +70,7 @@ export default class UpperPart extends Phaser.GameObjects.Container {
         this.pawnLocation = -1;
         this.isPawnMoving = false;
         this.itemsCollected = [];
+        this.theScene.initializeItemsOnUpperPart();
     }
 
     private createStones(): void {
