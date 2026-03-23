@@ -4,6 +4,7 @@ import { Moon } from '../sprites/Moon';
 import Clouds from './Clouds';
 import { Mist } from './Mist';
 import { ObjectiveSlot } from '../types/LevelConfig';
+import { ItemData } from '../types/ItemConfig';
 
 export default class UpperPart extends Phaser.GameObjects.Container {
     private dtc: DTC = new DTC();
@@ -12,7 +13,9 @@ export default class UpperPart extends Phaser.GameObjects.Container {
     private moon:Moon;
     private scenery!:Phaser.GameObjects.Image;
     private imgObjectives:Phaser.GameObjects.Image[] = [];
-    private readonly alphaGhost:number = 0.85;
+    private objectives:ObjectiveSlot[] = [];
+    //private readonly alphaGhost:number = 0.85;
+    private readonly alphaGhost:number = 0.1;
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y);
@@ -36,6 +39,9 @@ export default class UpperPart extends Phaser.GameObjects.Container {
     }
 
     public initializeItems(objectives:ObjectiveSlot[]): void {
+        this.objectives = objectives;
+        this.imgObjectives = [];
+
         console.log('Initialize Items');
         console.log(objectives);
 
@@ -65,11 +71,26 @@ export default class UpperPart extends Phaser.GameObjects.Container {
             this.imgObjectives.push(img);
             this.add(img);
         }
-        
     }
 
-    public newItemAcquired(newItem:string): void {
-        console.log('New Item Acquired: ' + newItem);
+    public newItemAcquired(item:ItemData): void {
+        console.log('New Item Acquired: ', item);
 
+
+
+        // Find the first unfilled slot for this item type
+        const slotIndex = this.objectives.findIndex(
+            obj => obj.itemType === item.itemName && !obj.isFilled
+        );
+
+        if (slotIndex !== -1) {
+            this.objectives[slotIndex].isFilled = true;
+            
+            // Trigger the visual "Real Icon" update
+            this.imgObjectives[slotIndex].setAlpha(1.0);;
+            
+            // Check if the level is complete
+            //this.checkVictory();
+        }
     }
 }

@@ -18,6 +18,28 @@ export const LEVEL_MANIFEST: LevelData[] = [
     {
         id: 1,
         title: "Collect the 3 keys before getting possessed",
+        goodItems: [ ],
+        badItems: [],
+        collectables: [ 
+            {itemType: 'key', stoneID: 1}, 
+            {itemType: 'key', stoneID: 2}, 
+            {itemType: 'key', stoneID: 3}, 
+            {itemType: 'key', stoneID: 4},
+            {itemType: 'key', stoneID: 5}, 
+            {itemType: 'key', stoneID: 6}, 
+            {itemType: 'key', stoneID: 7}, 
+            {itemType: 'key', stoneID: 8} 
+        ],
+        items: ['key', 'key', 'key'],
+        objectives: [
+            { itemType: 'key', isFilled: false },
+            { itemType: 'key', isFilled: false },
+            { itemType: 'key', isFilled: false }
+        ]
+    },
+    {
+        id: 4,
+        title: "Collect the 3 keys before getting possessed",
         goodItems: [ 7, 10, 16, 24, 26],
         badItems: [3, 6, 9, 12, 13, 19, 20, 21, 25],
         collectables: [ {itemType: 'key', stoneID: 5}, {itemType: 'key', stoneID: 11}, {itemType: 'key', stoneID: 17}, {itemType: 'key', stoneID: 22} ],

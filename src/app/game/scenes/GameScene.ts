@@ -70,8 +70,8 @@ export class GameScene extends Phaser.Scene {
             console.log('Restart game...');
             this.restartGame();
         });
-        this.board.on('test-action-from-board', () => {
-            this.upperPart.newItemAcquired('key');
+        this.board.on('item-collected', (item:ItemData) => {
+            this.upperPart.newItemAcquired(item);
         });
 
         this.playCards = new PlayCards(this, 0, 2386, this.audioManager);
@@ -227,7 +227,6 @@ export class GameScene extends Phaser.Scene {
         } else {
             this.scene.restart({ levelId: this.currentLevelId });
         }
-        
     }
 
     public initializeItemsOnUpperPart(): void {

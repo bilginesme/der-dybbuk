@@ -291,7 +291,10 @@ export default class UpperPart extends Phaser.GameObjects.Container {
                 if(item.nature == ItemNature.COLLECTABLE) {
                     const availableStones = BOARD_MANIFEST.filter(s => s.itemNature == ItemNature.GOOD && s.itemType == 0 && s.id != stoneId);
                     this.itemsCollected.push(item.itemName.toString());
-
+                    this.emit('item-collected', item);
+                    
+                    console.log(this.itemsCollected);
+                    
                     let idx:number = Phaser.Math.Between(0, availableStones.length - 1);
                     let stoneToBeAssigned:StoneData = availableStones[idx];
                     

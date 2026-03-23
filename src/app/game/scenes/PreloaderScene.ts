@@ -38,7 +38,7 @@ export default class PreloaderScene extends Phaser.Scene {
             loadingText.destroy();
             
             //this.scene.start('SettingsScene');  // Start the Menu
-            this.scene.start('GameScene', { levelId: 3 });
+            this.scene.start('GameScene', { levelId: 1 });
             //this.scene.start('MenuScene');  // Start the Menu
             //this.scene.start('GameOverScene', { score: 13400, result: false });
         });
