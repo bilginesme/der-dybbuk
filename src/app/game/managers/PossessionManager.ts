@@ -11,8 +11,8 @@ export class PossessionManager {
     private readonly scoreMin: number = 0;
     private readonly scoreMax: number = 100;
     private startingPossession:number = 40;
-    
-    constructor(threshold: number = 80, maxTurns: number = 5) {
+
+    constructor(threshold: number = 80, maxTurns: number = 10) {
         this.state = {
             score: this.startingPossession,
             threshold: threshold,
@@ -37,6 +37,7 @@ export class PossessionManager {
         if (this.state.score >= this.state.threshold && !this.state.isPossessed) {
             this.state.isPossessed = true;
             this.state.turnsToRecover = this.state.maxTurns;
+            console.log('Possessed!');
             return true; // Just became possessed
         }
         
@@ -52,7 +53,7 @@ export class PossessionManager {
     public decrementTurn(): boolean {
         if (this.state.isPossessed) {
             this.state.turnsToRecover--;
-            return this.state.turnsToRecover <= 0; // Returns true if Game Over
+            return this.state.turnsToRecover < 0; // Returns true if Game Over
         }
         return false;
     }
@@ -60,4 +61,13 @@ export class PossessionManager {
     public isPossessedNow():boolean {
         return this.state.isPossessed;
     }
+
+    public slowDwonPossession():void {
+        if(this.state.isPossessed) {
+            if(this.state.turnsToRecover > 0) {
+                this.state.turnsToRecover+= 2;
+            }
+        }
+    }
+
 }

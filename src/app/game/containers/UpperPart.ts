@@ -15,7 +15,8 @@ export default class UpperPart extends Phaser.GameObjects.Container {
     private imgObjectives:Phaser.GameObjects.Image[] = [];
     private objectives:ObjectiveSlot[] = [];
     //private readonly alphaGhost:number = 0.85;
-    private readonly alphaGhost:number = 0.1;
+    private readonly alphaGhost:number = 0.3;
+    private readonly scaleItem:number = 0.35;
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y);
@@ -42,21 +43,19 @@ export default class UpperPart extends Phaser.GameObjects.Container {
         this.objectives = objectives;
         this.imgObjectives = [];
 
-        console.log('Initialize Items');
-        console.log(objectives);
-
         let startX = 70;
         let startY = 280;
-        
+        let xSpace:number = 75;
+
         for(let i:number=0; i < objectives.length; i++) {
-            let x:number = startX + i * 90;
+            let x:number = startX + i * xSpace;
             let y:number = startY;
             let frameNo = 2;     
             const img = this.scene.add.image(x, y, 'items-atlas', frameNo)
-                .setScale(0.40)
+                .setScale(this.scaleItem)
                 .setOrigin(0.5, 1.0)
                 .setAlpha(this.alphaGhost)
-                .setTint(0x888888)
+                .setTint(0xAAAAAA)
                 .setInteractive();
 
             this.scene.tweens.add({
@@ -74,10 +73,6 @@ export default class UpperPart extends Phaser.GameObjects.Container {
     }
 
     public newItemAcquired(item:ItemData): void {
-        console.log('New Item Acquired: ', item);
-
-
-
         // Find the first unfilled slot for this item type
         const slotIndex = this.objectives.findIndex(
             obj => obj.itemType === item.itemName && !obj.isFilled

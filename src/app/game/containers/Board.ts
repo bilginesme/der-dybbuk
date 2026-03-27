@@ -293,8 +293,6 @@ export default class UpperPart extends Phaser.GameObjects.Container {
                     this.itemsCollected.push(item.itemName.toString());
                     this.emit('item-collected', item);
                     
-                    console.log(this.itemsCollected);
-                    
                     let idx:number = Phaser.Math.Between(0, availableStones.length - 1);
                     let stoneToBeAssigned:StoneData = availableStones[idx];
                     
@@ -344,10 +342,12 @@ export default class UpperPart extends Phaser.GameObjects.Container {
             this.gemRight.setTexture('gem-green');
         }
 
+        this.theScene.checkPossession();
+
         let isLevelComplete:boolean = this.checkWinCondition(this.theScene.getCurrentLevelID());
-        console.log('isLevelComplete = ' + isLevelComplete);
 
         if(isLevelComplete) {
+
             this.theScene.nextLevel();
         }
     }

@@ -61,9 +61,10 @@ export class GameScene extends Phaser.Scene {
         this.board = new Board(this, 0, 300);
         this.board.on('pawn-movement-complete', (item:ItemData) => {
             this.possessionManager.updateScore(item.possessionImpact);
-            this.scoreBoard.updateScore(this.possessionManager.state.score);
+            this.scoreBoard.updateScore(this.possessionManager.state.score, this.possessionManager.state.turnsToRecover);
             if(item.nature == ItemNature.GOOD || item.nature == ItemNature.HEALER) {
                 this.playCards.openOneRandomCard();
+                this.possessionManager.slowDwonPossession();
             }
         });
         this.board.on('restart-game', () => {
@@ -85,7 +86,7 @@ export class GameScene extends Phaser.Scene {
         this.possessionManager = new PossessionManager();
 
         this.scoreBoard = new ScoreBoard(this, this.board.x + 350, this.board.y + 500);
-        this.scoreBoard.updateScore(this.possessionManager.state.score);
+        this.scoreBoard.updateScore(this.possessionManager.state.score, this.possessionManager.state.turnsToRecover);
 
         let level:LevelData = LEVEL_MANIFEST.find(l => l.id === this.currentLevelId) || LEVEL_MANIFEST[0];
         this.scoreBoard.updateLevel(level);
@@ -204,10 +205,21 @@ export class GameScene extends Phaser.Scene {
 
     public updateScore(amount:number) {
         this.possessionManager.updateScore(amount);
-        this.scoreBoard.updateScore(this.possessionManager.state.score);
+        this.scoreBoard.updateScore(this.possessionManager.state.score, this.possessionManager.state.turnsToRecover);
+    }
+
+    public checkPossession():void {
+        let isOver = this.possessionManager.decrementTurn();
+
+        if(isOver) {
+            alert('Game Over!')
+        }
+
+        console.log('Possession : ' + isOver);
     }
 
     public isPossessedNow():boolean {
+        this.scoreBoard.updateScore(this.possessionManager.state.score, this.possessionManager.state.turnsToRecover);
         return this.possessionManager.isPossessedNow();
     }
 
@@ -216,17 +228,42 @@ export class GameScene extends Phaser.Scene {
     }
 
     public nextLevel():void {
-        this.currentLevelId++;
-        if(this.currentLevelId > LEVEL_MANIFEST.length) {
-            console.log('This world is complete. CONGRATS');
-            if(confirm('This world is complete. CONGRATS')) {
-                this.currentLevelId = 1;
-                this.scene.restart({ levelId: this.currentLevelId });    
-            }
+        // 1. Optional: Disable further input so the player doesn't 
+        // keep clicking during the 1-second "breath"
+        this.input.enabled = false;
 
-        } else {
-            this.scene.restart({ levelId: this.currentLevelId });
-        }
+        this.audioManager.playSFX('level-complete');
+
+        // 2. Schedule the Success Scene launch
+        this.time.delayedCall(3000, () => {
+            this.scene.pause(); 
+            
+            /*
+            // Launch your quality SuccessScene
+            this.scene.launch('SuccessScene', { 
+                levelId: this.currentLevelId,
+                isLastLevel: this.currentLevelId >= LEVEL_MANIFEST.length 
+            });
+            */
+
+            this.currentLevelId++;
+            if(this.currentLevelId > LEVEL_MANIFEST.length) {
+                console.log('This world is complete. CONGRATS');
+                if(confirm('This world is complete. CONGRATS')) {
+                    this.currentLevelId = 1;
+                    this.scene.restart({ levelId: this.currentLevelId });    
+                }
+
+            } else {
+                this.scene.restart({ levelId: this.currentLevelId });
+            }
+            
+            // Re-enable input for the next level's UI
+            this.input.enabled = true;
+        }, [], this);
+        
+
+      
     }
 
     public initializeItemsOnUpperPart(): void {

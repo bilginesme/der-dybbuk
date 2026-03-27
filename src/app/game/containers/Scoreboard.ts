@@ -5,6 +5,7 @@ import { LevelData } from '../types/LevelConfig';
 export default class ScoreBoard extends Phaser.GameObjects.Container {
    private dtc: DTC = new DTC();
    private txtScore: Phaser.GameObjects.Text;
+   private txtPossessionTurns: Phaser.GameObjects.Text;
    private txtLevel: Phaser.GameObjects.Text;
    private txtLevelDesc: Phaser.GameObjects.Text;
 
@@ -29,6 +30,19 @@ export default class ScoreBoard extends Phaser.GameObjects.Container {
          .setVisible(true); 
       this.add(this.txtScore);
    
+      this.txtPossessionTurns = scene.add.text(450, 0, '000', {
+         fontSize: '48px',
+         color: '#ffffff', 
+         fontStyle: 'bold',
+         fontFamily: this.dtc.strFontFamily,
+         stroke: '#000000',
+         strokeThickness: 4,
+         shadow: { offsetX: 2, offsetY: 2, color: '#000', blur: 2, fill: true }
+         })
+         .setOrigin(0.0, 0.5)
+         .setVisible(true); 
+      this.add(this.txtPossessionTurns);
+
       this.txtLevel = scene.add.text(0, 0, '000', {
          fontSize: '48px',
          color: '#ffffff', 
@@ -60,8 +74,9 @@ export default class ScoreBoard extends Phaser.GameObjects.Container {
       this.add(this.txtLevelDesc);
    }
 
-   public updateScore(newScore: number) {
+   public updateScore(newScore: number, possessionTurns: number = 0) {
       this.txtScore.setText(newScore.toString());
+      this.txtPossessionTurns.setText(possessionTurns.toString());
    }
 
    public updateLevel(level: LevelData) {

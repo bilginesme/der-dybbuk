@@ -97,5 +97,6 @@ export default class PreloaderScene extends Phaser.Scene {
 
         this.load.audio('tick', 'assets/sounds/tick.mp3');
         this.load.audio('soundDice', 'assets/sounds/dice.mp3');
+        this.load.audio('level-complete', 'assets/sounds/level-complete.mp3');
     }
 }
