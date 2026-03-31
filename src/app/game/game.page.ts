@@ -7,6 +7,7 @@ import PreloaderScene  from './scenes/PreloaderScene';
 import GameOverScene from './scenes/GameOverScene';
 import { TranslateService } from '@ngx-translate/core';
 import SettingsScene from './scenes/SettingsScene';
+import SuccessScene from './scenes/SuccessScene';
 
 @Component({
   selector: 'app-game',
@@ -51,7 +52,7 @@ export class GamePage implements OnInit {
             debug: true              // Set to TRUE to see hitboxes (very helpful for prototyping!)
         }
         },
-        scene: [BootScene, PreloaderScene, GameScene, MenuScene, SettingsScene, GameOverScene], 
+        scene: [BootScene, PreloaderScene, GameScene, MenuScene, SettingsScene, GameOverScene, SuccessScene], 
         render: { 
           antialiasGL: true, 
           antialias: true, 

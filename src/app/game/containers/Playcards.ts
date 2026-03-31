@@ -32,7 +32,7 @@ export default class PlayCards extends Phaser.GameObjects.Container {
         });
         this.add(this.dice);
 
-        this.openOneRandomCard();
+        this.openOneRandomCard(false);
     }
 
     private createCards(): void {
@@ -93,7 +93,7 @@ export default class PlayCards extends Phaser.GameObjects.Container {
         this.emit('dice-roll', diceResult);
     }
 
-    public openOneRandomCard(): void {
+    public openOneRandomCard(isSpecial:boolean): void {
         let availableCards:number[] = [];
         
         for(let i = 0; i < this.numCards; i++) {    
@@ -109,17 +109,23 @@ export default class PlayCards extends Phaser.GameObjects.Container {
             let card:Phaser.GameObjects.Sprite = this.cards[cardIndex];
             card.setTexture('playcard-front');
             card.setVisible(true);
-            let diceValue:number = Phaser.Math.Between(1, 6);
-            let frameNo:number = diceValue - 1;
-            this.cardValues.set(cardIndex, diceValue);
-            let cardDiceImage = this.scene.add.sprite(card.x, card.y, 'dice-atlas', frameNo).setInteractive();         
-            cardDiceImage.setScale(0.22);
-            cardDiceImage.setAngle(Phaser.Math.Between(-15, 15));
-            cardDiceImage.setVisible(true);
-            cardDiceImage.on('pointerdown', () => {
-                this.handleDiceRoll(cardIndex, diceValue, cardDiceImage);
-            });
-            this.add(cardDiceImage);
+
+            if(isSpecial) {
+                console.log('Open one random special playcard');
+
+            } else {
+                let diceValue:number = Phaser.Math.Between(1, 6);
+                let frameNo:number = diceValue - 1;
+                this.cardValues.set(cardIndex, diceValue);
+                let cardDiceImage = this.scene.add.sprite(card.x, card.y, 'dice-atlas', frameNo).setInteractive();         
+                cardDiceImage.setScale(0.22);
+                cardDiceImage.setAngle(Phaser.Math.Between(-15, 15));
+                cardDiceImage.setVisible(true);
+                cardDiceImage.on('pointerdown', () => {
+                    this.handleDiceRoll(cardIndex, diceValue, cardDiceImage);
+                });
+                this.add(cardDiceImage);
+            }
         }
     }
 }

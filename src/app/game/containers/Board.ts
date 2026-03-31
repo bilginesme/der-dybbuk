@@ -4,10 +4,12 @@ import { DTC } from '../../DTC';
 import { ITEM_INVENTORY, ItemData, ItemNature } from '../types/ItemConfig';
 import { GameScene } from '../scenes/GameScene';
 import { LEVEL_MANIFEST } from '../types/LevelConfig';
+import { AudioManager } from '../managers/AudioManager';
 
 export default class UpperPart extends Phaser.GameObjects.Container {
     private dtc: DTC = new DTC();
     private theScene:GameScene;
+    private audioManager!: AudioManager;
     private boardFrame!:Phaser.GameObjects.Image;
     private template!:Phaser.GameObjects.Image;
     private cornerLeft!:Phaser.GameObjects.Image;
@@ -22,11 +24,12 @@ export default class UpperPart extends Phaser.GameObjects.Container {
     private itemSpriteMap: Map<number, ItemData> = new Map();
     private itemsCollected:string[] = [];
 
-    constructor(scene: GameScene, x: number, y: number) {
+    constructor(scene: GameScene, x: number, y: number, audioManager:AudioManager) {
         super(scene, x, y);
         scene.add.existing(this); // Add the empty container to the scene
 
         this.theScene = scene;
+        this.audioManager = audioManager;
 
         this.boardFrame = scene.add.image(0, 0, 'board-frame').setOrigin(0, 0);
         this.add(this.boardFrame);
@@ -38,13 +41,13 @@ export default class UpperPart extends Phaser.GameObjects.Container {
         
         this.cornerLeft = scene.add.image(0, 0, 'corner-left').setOrigin(0, 0).setInteractive();
         this.cornerLeft.on('pointerdown', () => {
-            this.emit('restart-game');
+            this.emit('left-corner-clicked');
         });
         this.add(this.cornerLeft);
 
         this.cornerRight = scene.add.image(1260, 0, 'corner-right').setOrigin(1, 0).setInteractive();
         this.cornerRight.on('pointerdown', () => {
-            this.emit('test-action-from-board');
+            this.emit('right-corner-clicked');
         });
         this.add(this.cornerRight);
 
@@ -243,6 +246,13 @@ export default class UpperPart extends Phaser.GameObjects.Container {
         const itemSprite = this.list.find(child => child.getData('stoneId') === stoneId) as Phaser.GameObjects.Sprite;
 
         if(item && itemSprite) {
+            if(item.nature == ItemNature.GOOD) {
+                this.audioManager.playSFX('item-good');
+            }
+            else if(item.nature == ItemNature.BAD) {
+                this.audioManager.playSFX('bats');
+            }
+
             const stoneInManifest = BOARD_MANIFEST.find(s => s.id === stoneId);
             if (stoneInManifest) {
                 //stoneInManifest.itemNature = ItemNature.NONE;
@@ -309,6 +319,9 @@ export default class UpperPart extends Phaser.GameObjects.Container {
                             this.placeItemOnStone(stoneToBeAssigned.id, selectedItemType);
                         }
                     }   // Create another GOOD item elsewhere
+
+                    console.log('Also create a card');
+                    this.theScene.openOneRandomPlayCard(false);   // TODO: For now always special, later random with standard
                 }   
             }
         }
@@ -347,8 +360,7 @@ export default class UpperPart extends Phaser.GameObjects.Container {
         let isLevelComplete:boolean = this.checkWinCondition(this.theScene.getCurrentLevelID());
 
         if(isLevelComplete) {
-
-            this.theScene.nextLevel();
+            this.theScene.levelComplete();
         }
     }
  

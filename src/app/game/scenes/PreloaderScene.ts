@@ -41,6 +41,7 @@ export default class PreloaderScene extends Phaser.Scene {
             this.scene.start('GameScene', { levelId: 1 });
             //this.scene.start('MenuScene');  // Start the Menu
             //this.scene.start('GameOverScene', { score: 13400, result: false });
+            //this.scene.start('SuccessScene', { score: 13400, result: true, levelId:1 });
         });
 
         const font = new FontFace(this.dtc.strFontFamily, 'url(assets/fonts/PlaypenSans.ttf)');
@@ -52,7 +53,8 @@ export default class PreloaderScene extends Phaser.Scene {
     
         this.load.image('bg', 'assets/images/bg.png');
         this.load.image('brick-bg', 'assets/images/brick-bg.png');
- 
+        this.load.image('lamp', 'assets/images/lamp.png');
+
         this.load.image('scenery-01', 'assets/images/upper-part/scenery-01.png');
         
         this.load.image('board-frame', 'assets/images/board/board-frame.png');
@@ -98,5 +100,9 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.audio('tick', 'assets/sounds/tick.mp3');
         this.load.audio('soundDice', 'assets/sounds/dice.mp3');
         this.load.audio('level-complete', 'assets/sounds/level-complete.mp3');
+        this.load.audio('game-over', 'assets/sounds/game-over.mp3');
+        this.load.audio('collect-key', 'assets/sounds/collect-key.mp3');
+        this.load.audio('bats', 'assets/sounds/bats.mp3');
+        this.load.audio('item-good', 'assets/sounds/item-good.mp3');
     }
 }

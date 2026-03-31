@@ -18,10 +18,12 @@
     "SFX_VOLUME": "SFX VOLUME" 
   },
   "GAME_OVER_SCENE": {
-    "TITLE_SUCCESS": "You succeded :)",
-    "TITLE_FAILURE": "Too much love.\nSorry!",
+    "TITLE_SUCCESS": "You overcame Dybbuk.\nCongratulations :)",
+    "TITLE_FAILURE": "Dybbuk was strong.\nSorry!",
     "SCORE": "SCORE",
+    "LEVEL": "Level",
     "PLAY_AGAIN": "PLAY AGAIN",
+    "NEXT_LEVEL": "NEXT LEVEL",
     "MAIN_MENU": "MAIN MENU"
   }
 

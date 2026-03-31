@@ -1,21 +1,26 @@
 import { DTC } from "src/app/DTC";
 import { TranslateService } from '@ngx-translate/core';
 
-export default class GameOverScene extends Phaser.Scene {
+export default class SuccessScene extends Phaser.Scene {
     private translate!: TranslateService;
     private dtc:DTC = new DTC();
     private subText!: Phaser.GameObjects.Text;
     private lamp!: Phaser.GameObjects.Image;
     private buttonPlayAgain!: Phaser.GameObjects.Sprite;
     private txtPlayAgain!: Phaser.GameObjects.Text;
+    private buttonNextLevel!: Phaser.GameObjects.Sprite;
+    private txtNextLevel!: Phaser.GameObjects.Text;
     private buttonMainMenu!: Phaser.GameObjects.Sprite;
     private txtMainMenu!: Phaser.GameObjects.Text;
 
+    private txtNextLevelTitle!:Phaser.GameObjects.Text;
+    private txtNextLevelDescription!:Phaser.GameObjects.Text;
+
     constructor() {
-        super('GameOverScene');
+        super('SuccessScene');
     }
 
-    create(data: { score: number, result: string }) {
+    create(data: { score: number, result: string, levelId: number}) {
         this.translate = this.registry.get('translateService'); 
         this.add.image(0, 0, 'brick-bg').setOrigin(0, 0);
         
@@ -52,8 +57,7 @@ export default class GameOverScene extends Phaser.Scene {
             fontFamily: this.dtc.strFontFamily
         }).setOrigin(0.5);
 
-
-        this.add.text(this.scale.width / 2, 1500, strResultText, 
+        this.add.text(this.scale.width / 2, 1300, strResultText, 
         { 
             fontSize: '90px',
             fontStyle: 'bold',
@@ -61,6 +65,65 @@ export default class GameOverScene extends Phaser.Scene {
             align: 'center',
             fontFamily: this.dtc.strFontFamily 
         }).setOrigin(0.5);
+
+        let levelId:number = data.levelId + 1;
+        console.log('Next level is : ' + levelId);
+        
+        this.buttonNextLevel = this.add.sprite(this.scale.width / 2, 1600, 'button-green-normal');
+        this.buttonNextLevel.setInteractive();
+        this.buttonNextLevel.on('pointerdown', () => {
+            this.buttonNextLevel.setTexture('button-green-pressed');
+        });
+        this.buttonNextLevel.on('pointerup', () => {
+              this.tweens.add({
+                targets: this.buttonNextLevel,
+                duration: 20000,   
+                ease: 'Linear',  
+                onComplete: () => {
+                    this.buttonNextLevel.setTexture('button-green-normal');
+                    this.scene.start('GameScene', { levelId: levelId });
+                }
+            });
+        });
+
+        this.txtNextLevel = this.add.text(this.scale.width / 2, 
+            this.buttonNextLevel.y - 10,
+            this.translate.instant('GAME_OVER_SCENE.NEXT_LEVEL'),
+            { 
+            fontSize: '80px',
+            fontStyle: 'bold',
+            color: '#ffffff',
+            align: 'center',
+            fontFamily: this.dtc.strFontFamily,
+        })
+        .setOrigin(0.5);
+
+
+        this.txtNextLevelTitle = this.add.text(this.scale.width / 2, 
+            this.buttonNextLevel.y + 170,
+            this.translate.instant('GAME_OVER_SCENE.LEVEL') + ' ' + levelId,
+            { 
+            fontSize: '60px',
+            fontStyle: 'normal',
+            color: '#ffffff',
+            align: 'center',
+            fontFamily: this.dtc.strFontFamily,
+        })
+        .setOrigin(0.5);
+
+        this.txtNextLevelDescription = this.add.text(this.scale.width / 2, 
+            this.buttonNextLevel.y + 240,
+            'Description of the level',
+            { 
+            fontSize: '50px',
+            fontStyle: 'normal',
+            color: '#ffffff',
+            align: 'center',
+            fontFamily: this.dtc.strFontFamily,
+        })
+        .setOrigin(0.5);
+
+
 
 
         this.buttonPlayAgain = this.add.sprite(this.scale.width / 2, 2250, 'button-green-normal');

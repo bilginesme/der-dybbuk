@@ -1,6 +1,7 @@
 import * as Phaser from 'phaser';
 import { DTC } from '../../DTC';
 import { LevelData } from '../types/LevelConfig';
+import { PossessionManager } from '../managers/PossessionManager';
 
 export default class ScoreBoard extends Phaser.GameObjects.Container {
    private dtc: DTC = new DTC();
@@ -74,9 +75,9 @@ export default class ScoreBoard extends Phaser.GameObjects.Container {
       this.add(this.txtLevelDesc);
    }
 
-   public updateScore(newScore: number, possessionTurns: number = 0) {
-      this.txtScore.setText(newScore.toString());
-      this.txtPossessionTurns.setText(possessionTurns.toString());
+   public updateScore(possessionManager:PossessionManager) {
+      this.txtScore.setText(possessionManager.state.score.toString());
+      this.txtPossessionTurns.setText(possessionManager.state.turnsToRecover.toString());
    }
 
    public updateLevel(level: LevelData) {

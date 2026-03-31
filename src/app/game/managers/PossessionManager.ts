@@ -66,6 +66,8 @@ export class PossessionManager {
         if(this.state.isPossessed) {
             if(this.state.turnsToRecover > 0) {
                 this.state.turnsToRecover+= 2;
+                if(this.state.turnsToRecover > this.state.maxTurns)
+                    this.state.turnsToRecover = this.state.maxTurns;
             }
         }
     }
