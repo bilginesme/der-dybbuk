@@ -2,6 +2,7 @@ export enum ItemNature {
     GOOD = 'good',
     HEALER = 'healer',
     BAD = 'bad',
+    PURE_EVIL = 'pure_evil',
     COLLECTABLE = 'collectable',
     NONE= 'none'
 }
@@ -57,5 +58,11 @@ export const ITEM_INVENTORY: Record<number, ItemData> = {
         possessionImpact: -20,
         description: 'A super healer.'
     },
-
+    7: {
+        itemName: 'pure evil',
+        nature: ItemNature.PURE_EVIL,
+        textureFrameNo: 10,
+        possessionImpact: 50,
+        description: 'Pure evil'
+    },
 };

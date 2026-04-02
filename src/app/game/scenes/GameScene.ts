@@ -286,13 +286,11 @@ export class GameScene extends Phaser.Scene {
             // Re-enable input for the next level's UI
             this.input.enabled = true;
         }, [], this);
-        
-
-      
     }
 
     public initializeItemsOnUpperPart(): void {
         let objectives:ObjectiveSlot[] = LEVEL_MANIFEST[this.currentLevelId - 1].objectives;
+        objectives.forEach(q=> q.isFilled = false);
         this.upperPart.initializeItems(objectives);
     }
 }

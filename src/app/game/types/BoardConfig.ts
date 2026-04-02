@@ -9,6 +9,7 @@ export interface StoneData {
     rotation: number;
     // Navigation Logic
     nextIds: number[];    // Array of possible next stones
+    visibilityToggleIds:number[];
     isVisible: boolean;   // Whether the stone is currently 'above ground'
     isTrigger?: boolean;  // Does landing here cause other stones to sink/rise?
     itemNature: ItemNature;
@@ -24,6 +25,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.45,
         rotation: 115,
         nextIds: [2],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -35,7 +37,8 @@ export const BOARD_MANIFEST: StoneData[] = [
         stoneFrame: 5,
         scale: 0.50,
         rotation: 90,
-        nextIds: [3],
+        nextIds: [3, 27],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -48,6 +51,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.50,
         rotation: 90,
         nextIds: [4],
+        visibilityToggleIds: [27],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -60,6 +64,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.50,
         rotation: 105,
         nextIds: [5],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -72,6 +77,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.50,
         rotation: 90,
         nextIds: [6],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -84,6 +90,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.50,
         rotation: 10,
         nextIds: [7],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -96,6 +103,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.50,
         rotation: 10,
         nextIds: [8],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -108,6 +116,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.50,
         rotation: 90,
         nextIds: [9],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -120,6 +129,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.50,
         rotation: 88,
         nextIds: [10],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -132,6 +142,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.40,
         rotation: 150,
         nextIds: [11],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -144,6 +155,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.40,
         rotation: -30,
         nextIds: [12],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -156,6 +168,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.45,
         rotation: 180,
         nextIds: [13],
+        visibilityToggleIds: [35],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -168,6 +181,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.40,
         rotation: 70,
         nextIds: [14],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -180,6 +194,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.55,
         rotation: 90,
         nextIds: [15],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -192,6 +207,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.50,
         rotation: 0,
         nextIds: [16],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -204,6 +220,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.55,
         rotation: 40,
         nextIds: [17],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -216,6 +233,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.45,
         rotation: 15,
         nextIds: [18],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -228,6 +246,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.60,
         rotation: 90,
         nextIds: [19],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -240,6 +259,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.45,
         rotation: -90,
         nextIds: [20],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -252,6 +272,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.60,
         rotation: 90,
         nextIds: [21],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -264,6 +285,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.40,
         rotation: -47,
         nextIds: [22],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -276,6 +298,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.50,
         rotation: 35,
         nextIds: [23],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -288,6 +311,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.50,
         rotation: 110,
         nextIds: [24],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -300,6 +324,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.50,
         rotation: 50,
         nextIds: [25],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -312,6 +337,7 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.50,
         rotation: 70,
         nextIds: [26],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
@@ -324,8 +350,128 @@ export const BOARD_MANIFEST: StoneData[] = [
         scale: 0.40,
         rotation: 205,
         nextIds: [1],
+        visibilityToggleIds: [],
         isVisible: true,
         itemNature: ItemNature.NONE,
         itemType: 0
     },
+
+
+    {
+        id: 27,
+        x: 395,
+        y: 1505,
+        stoneFrame: 8,
+        scale: 0.50,
+        rotation: 150,
+        nextIds: [28],
+        visibilityToggleIds: [3],
+        isVisible: false,
+        itemNature: ItemNature.NONE,
+        itemType: 0
+    },
+    {
+        id: 28,
+        x: 510,
+        y: 1385,
+        stoneFrame: 6,
+        scale: 0.50,
+        rotation: 150,
+        nextIds: [29],
+        visibilityToggleIds: [],
+        isVisible: true,
+        itemNature: ItemNature.NONE,
+        itemType: 0
+    },
+    {
+        id: 29,
+        x: 625,
+        y: 1245,
+        stoneFrame: 2,
+        scale: 0.45,
+        rotation: -70,
+        nextIds: [30],
+        visibilityToggleIds: [],
+        isVisible: true,
+        itemNature: ItemNature.NONE,
+        itemType: 0
+    },
+    {
+        id: 30,
+        x: 688,
+        y: 1090,
+        stoneFrame: 17,
+        scale: 0.45,
+        rotation: 0,
+        nextIds: [31],
+        visibilityToggleIds: [],
+        isVisible: true,
+        itemNature: ItemNature.NONE,
+        itemType: 0
+    },
+    {
+        id: 31,
+        x: 686,
+        y: 910,
+        stoneFrame: 29,
+        scale: 0.5,
+        rotation: 190,
+        nextIds: [32],
+        visibilityToggleIds: [],
+        isVisible: true,
+        itemNature: ItemNature.NONE,
+        itemType: 0
+    },
+    {
+        id: 32,
+        x: 690,
+        y: 740,
+        stoneFrame: 5,
+        scale: 0.4,
+        rotation: 0,
+        nextIds: [33],
+        visibilityToggleIds: [],
+        isVisible: true,
+        itemNature: ItemNature.NONE,
+        itemType: 0
+    },
+    {
+        id: 33,
+        x: 620,
+        y: 570,
+        stoneFrame: 10,
+        scale: 0.45,
+        rotation: 220,
+        nextIds: [34],
+        visibilityToggleIds: [],
+        isVisible: true,
+        itemNature: ItemNature.NONE,
+        itemType: 0
+    },
+    {
+        id: 34,
+        x: 720,
+        y: 450,
+        stoneFrame: 4,
+        scale: 0.4,
+        rotation: 50,
+        nextIds: [35],
+        visibilityToggleIds: [],
+        isVisible: true,
+        itemNature: ItemNature.NONE,
+        itemType: 0
+    },
+    {
+        id: 35,
+        x: 850,
+        y: 320,
+        stoneFrame: 0,
+        scale: 0.45,
+        rotation: 60,
+        nextIds: [13],
+        visibilityToggleIds: [12],
+        isVisible: false,
+        itemNature: ItemNature.NONE,
+        itemType: 0
+    }
 ];

@@ -68,7 +68,7 @@ export default class UpperPart extends Phaser.GameObjects.Container {
         this.initialize();
     }
 
-    public initialize(): void {
+    private initialize(): void {
         this.pawn.setPosition(this.posPawnInitial.x, this.posPawnInitial.y);
         this.pawnLocation = -1;
         this.isPawnMoving = false;
@@ -83,7 +83,14 @@ export default class UpperPart extends Phaser.GameObjects.Container {
             var stone = BOARD_MANIFEST[i];
             stone.itemNature = ItemNature.NONE;
 
-            let alpha:number = Phaser.Math.FloatBetween(0.50, 0.70);
+            let alphaNormal:number = Phaser.Math.FloatBetween(0.50, 0.70);
+            let alphaSunken:number = 0.2;
+            let alpha:number = 0;
+            if(stone.isVisible)
+                alpha = alphaNormal;
+            else
+                alpha = alphaSunken;
+
             const imgStone = this.scene.add.image(stone.x, stone.y, 'stones-atlas', stone.stoneFrame)
                 .setOrigin(0.5, 0.5)
                 .setScale(stone.scale)
@@ -334,7 +341,7 @@ export default class UpperPart extends Phaser.GameObjects.Container {
                 if(stoneToBeAssigned) {
                     const matchingItemIds = Object.keys(ITEM_INVENTORY)
                     .map(Number)
-                    .filter(id => ITEM_INVENTORY[id].nature === ItemNature.BAD);
+                    .filter(id => ITEM_INVENTORY[id].nature === ItemNature.PURE_EVIL);
 
                     if (matchingItemIds.length > 0) {
                         // 2. Pick a random ID from the matching list
@@ -344,7 +351,7 @@ export default class UpperPart extends Phaser.GameObjects.Container {
                         this.placeItemOnStone(stoneToBeAssigned.id, selectedItemType);
                     }
                 }
-            }// Create another BAD item elsewhere
+            }// Create PURE EVIL
         }
 
         if(this.theScene.isPossessedNow()) {
