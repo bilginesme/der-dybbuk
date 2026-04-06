@@ -55,7 +55,7 @@ export const ITEM_INVENTORY: Record<number, ItemData> = {
         itemName: 'healer',
         nature: ItemNature.HEALER,
         textureFrameNo: 9,
-        possessionImpact: -20,
+        possessionImpact: -25,
         description: 'A super healer.'
     },
     7: {

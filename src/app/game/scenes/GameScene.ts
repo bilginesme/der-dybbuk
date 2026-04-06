@@ -73,15 +73,9 @@ export class GameScene extends Phaser.Scene {
         });
         this.board.on('right-corner-clicked', () => {
             console.log('Right clicked');
-            
-            this.audioManager.stopMusic();
-            this.audioManager.playSFX('game-over');
 
-            this.time.delayedCall(1500, () => {
-                this.scene.pause(); 
-                this.scene.start('GameOverScene', { score: 0, result: false });
-            });
-
+            // test the sunken toggle
+            this.board.toggleSunkenStones();
         });
         this.board.on('item-collected', (item:ItemData) => {
             this.audioManager.playSFX('collect-key');
@@ -259,7 +253,7 @@ export class GameScene extends Phaser.Scene {
         this.audioManager.stopMusic();
 
         // 2. Schedule the Success Scene launch
-        this.time.delayedCall(3000, () => {
+        this.time.delayedCall(1000, () => {
             this.scene.pause(); 
             
             // Launch your quality SuccessScene

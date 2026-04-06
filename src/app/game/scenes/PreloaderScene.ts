@@ -104,5 +104,6 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.audio('collect-key', 'assets/sounds/collect-key.mp3');
         this.load.audio('bats', 'assets/sounds/bats.mp3');
         this.load.audio('item-good', 'assets/sounds/item-good.mp3');
+        this.load.audio('stone-slide', 'assets/sounds/stone-slide.mp3');
     }
 }

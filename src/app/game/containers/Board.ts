@@ -83,19 +83,18 @@ export default class UpperPart extends Phaser.GameObjects.Container {
             var stone = BOARD_MANIFEST[i];
             stone.itemNature = ItemNature.NONE;
 
-            let alphaNormal:number = Phaser.Math.FloatBetween(0.50, 0.70);
-            let alphaSunken:number = 0.2;
             let alpha:number = 0;
             if(stone.isVisible)
-                alpha = alphaNormal;
+                alpha = this.getAlphaRaised();
             else
-                alpha = alphaSunken;
+                alpha = this.getAlphaSunken();
 
             const imgStone = this.scene.add.image(stone.x, stone.y, 'stones-atlas', stone.stoneFrame)
                 .setOrigin(0.5, 0.5)
                 .setScale(stone.scale)
                 .setAlpha(alpha)
-                .setAngle(stone.rotation);
+                .setAngle(stone.rotation)
+                .setData({stoneID: stone.id});
             this.add(imgStone);
             this.stones.push(imgStone);
 
@@ -364,6 +363,10 @@ export default class UpperPart extends Phaser.GameObjects.Container {
 
         this.theScene.checkPossession();
 
+        if(LEVEL_MANIFEST[this.theScene.getCurrentLevelID() - 1].toggleVisibilityStones.includes(stoneId)) {
+            this.toggleSunkenStones();
+        }
+
         let isLevelComplete:boolean = this.checkWinCondition(this.theScene.getCurrentLevelID());
 
         if(isLevelComplete) {
@@ -386,5 +389,91 @@ export default class UpperPart extends Phaser.GameObjects.Container {
         });
 
         return isComplete;
+    }
+
+    public toggleSunkenStones(): void {
+        console.log('Toggle sunken stones');
+
+        // 1. Capture ONLY the IDs that are currently sunken
+        const sunkenIdsAtStart = BOARD_MANIFEST
+            .filter(s => !s.isVisible)
+            .map(s => s.id);
+
+        // 2. Now loop through only those specific IDs
+        sunkenIdsAtStart.forEach(id => {
+            const stone = BOARD_MANIFEST.find(s => s.id === id);
+            if (!stone) return;
+
+            // Rise this stone
+            stone.isVisible = true;
+            const imgToRise = this.stones.find(s => s.getData('stoneID') === id);
+
+            this.scene.tweens.add({
+                targets: imgToRise,
+                alpha: this.getAlphaRaised(),
+                duration: 500,
+                ease: 'Power2'
+            });
+
+            // Sink the partners
+            stone.visibilityToggleIds.forEach(toggleId => {
+                const stoneToSink = BOARD_MANIFEST.find(s => s.id === toggleId);
+                if (stoneToSink) {
+                    stoneToSink.isVisible = false;
+                    const imgToSink = this.stones.find(s => s.getData('stoneID') === toggleId);
+
+                    this.scene.tweens.add({
+                        targets: imgToSink,
+                        alpha: this.getAlphaSunken(),
+                        duration: 500,
+                        ease: 'Power2'
+                    });
+                }
+            });
+        });
+
+        this.audioManager.playSFX('stone-slide');
+    }
+
+    public toggleSunkenStonesOLD(): void {
+        console.log('Toggle sunken stones');
+
+        BOARD_MANIFEST.forEach(stone => {
+            if(!stone.isVisible) {
+                const stoneImgToRise = this.stones.find(s => s.getData('stoneID') === stone.id);
+                stone.isVisible = true;
+
+                this.scene.tweens.add({
+                    targets: stoneImgToRise,
+                    alpha: this.getAlphaRaised(),
+                    duration: 500,
+                    ease: 'Power2'
+                });
+
+                stone.visibilityToggleIds.forEach(id => {
+                    let stoneAlt = BOARD_MANIFEST.find(s => s.id === id);
+                    stoneAlt!.isVisible = false;
+
+                    const stoneImgToSink = this.stones.find(s => s.getData('stoneID') === id);
+
+                    this.scene.tweens.add({
+                        targets: stoneImgToSink,
+                        alpha: this.getAlphaSunken(),
+                        duration: 500,
+                        ease: 'Power2'
+                    });
+                });
+            }
+        });
+
+        console.log(BOARD_MANIFEST);
+    }
+
+    private getAlphaSunken(): number {
+        return Phaser.Math.FloatBetween(0.10, 0.15);
+    }
+    
+    private getAlphaRaised(): number {
+        return Phaser.Math.FloatBetween(0.50, 0.70);
     }
 }
