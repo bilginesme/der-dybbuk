@@ -103,7 +103,8 @@ export default class UpperPart extends Phaser.GameObjects.Container {
             if(badItems.includes(stone.id)) {
                 const skull = this.scene.add.image(stone.x, stone.y, 'skull')
                     .setOrigin(0.5, 0.5)
-                    .setAlpha(0.2);
+                    .setAlpha(0.2)
+                    .setData({name: 'bad-item-icon'});
                 this.add(skull);
             }
         }
@@ -245,7 +246,8 @@ export default class UpperPart extends Phaser.GameObjects.Container {
 
     private handleAfterMovePawnComplete(): void {
         this.isPawnMoving = false;
-        
+        let possessionPrevious:boolean = this.theScene.isPossessedNow();
+
         const stoneId = this.pawnLocation;
         var stone = BOARD_MANIFEST[stoneId - 1];
         const item = this.itemSpriteMap.get(stoneId);
@@ -333,24 +335,29 @@ export default class UpperPart extends Phaser.GameObjects.Container {
         }
         else {
             if(stone.itemNature == ItemNature.BAD) {
-                const availableStones = BOARD_MANIFEST.filter(s => s.itemNature == ItemNature.BAD && s.itemType == 0 && s.id != stoneId);
-                let idx:number = Phaser.Math.Between(0, availableStones.length - 1);
-                let stoneToBeAssigned:StoneData = availableStones[idx];
-                
-                if(stoneToBeAssigned) {
-                    const matchingItemIds = Object.keys(ITEM_INVENTORY)
-                    .map(Number)
-                    .filter(id => ITEM_INVENTORY[id].nature === ItemNature.PURE_EVIL);
+                if(this.theScene.isPossessedNow()) {
+                    this.theScene.openOneRandomPlayCard(false);
+                } else {
+                    const availableStones = BOARD_MANIFEST.filter(s => s.itemNature == ItemNature.BAD && s.itemType == 0 && s.id != stoneId);
+                    let idx:number = Phaser.Math.Between(0, availableStones.length - 1);
+                    let stoneToBeAssigned:StoneData = availableStones[idx];
+                    
+                    if(stoneToBeAssigned) {
+                        const matchingItemIds = Object.keys(ITEM_INVENTORY)
+                        .map(Number)
+                        .filter(id => ITEM_INVENTORY[id].nature === ItemNature.PURE_EVIL);
 
-                    if (matchingItemIds.length > 0) {
-                        // 2. Pick a random ID from the matching list
-                        const randomIndex = Phaser.Math.Between(0, matchingItemIds.length - 1);
-                        const selectedItemType = matchingItemIds[randomIndex];
-                        
-                        this.placeItemOnStone(stoneToBeAssigned.id, selectedItemType);
+                        if (matchingItemIds.length > 0) {
+                            // 2. Pick a random ID from the matching list
+                            const randomIndex = Phaser.Math.Between(0, matchingItemIds.length - 1);
+                            const selectedItemType = matchingItemIds[randomIndex];
+                            
+                            this.placeItemOnStone(stoneToBeAssigned.id, selectedItemType);
+                        }
                     }
                 }
-            }// Create PURE EVIL
+                
+            }// When steppon on evil spots
         }
 
         if(this.theScene.isPossessedNow()) {
@@ -361,7 +368,12 @@ export default class UpperPart extends Phaser.GameObjects.Container {
             this.gemRight.setTexture('gem-green');
         }
 
+
         this.theScene.checkPossession();
+        let possessionPresent:boolean = this.theScene.isPossessedNow();
+        if(possessionPrevious != possessionPresent) {
+            this.togglePossessionVisuals(possessionPresent);
+        }
 
         if(LEVEL_MANIFEST[this.theScene.getCurrentLevelID() - 1].toggleVisibilityStones.includes(stoneId)) {
             this.toggleSunkenStones();
@@ -392,8 +404,6 @@ export default class UpperPart extends Phaser.GameObjects.Container {
     }
 
     public toggleSunkenStones(): void {
-        console.log('Toggle sunken stones');
-
         // 1. Capture ONLY the IDs that are currently sunken
         const sunkenIdsAtStart = BOARD_MANIFEST
             .filter(s => !s.isVisible)
@@ -432,48 +442,41 @@ export default class UpperPart extends Phaser.GameObjects.Container {
             });
         });
 
+        this.theScene.openOneRandomPlayCard(false);
         this.audioManager.playSFX('stone-slide');
     }
-
-    public toggleSunkenStonesOLD(): void {
-        console.log('Toggle sunken stones');
-
-        BOARD_MANIFEST.forEach(stone => {
-            if(!stone.isVisible) {
-                const stoneImgToRise = this.stones.find(s => s.getData('stoneID') === stone.id);
-                stone.isVisible = true;
-
-                this.scene.tweens.add({
-                    targets: stoneImgToRise,
-                    alpha: this.getAlphaRaised(),
-                    duration: 500,
-                    ease: 'Power2'
-                });
-
-                stone.visibilityToggleIds.forEach(id => {
-                    let stoneAlt = BOARD_MANIFEST.find(s => s.id === id);
-                    stoneAlt!.isVisible = false;
-
-                    const stoneImgToSink = this.stones.find(s => s.getData('stoneID') === id);
-
-                    this.scene.tweens.add({
-                        targets: stoneImgToSink,
-                        alpha: this.getAlphaSunken(),
-                        duration: 500,
-                        ease: 'Power2'
-                    });
-                });
-            }
-        });
-
-        console.log(BOARD_MANIFEST);
-    }
-
+ 
     private getAlphaSunken(): number {
         return Phaser.Math.FloatBetween(0.10, 0.15);
     }
     
     private getAlphaRaised(): number {
         return Phaser.Math.FloatBetween(0.50, 0.70);
+    }
+
+    private togglePossessionVisuals(isPossessed: boolean): void {
+        const newTexture = isPossessed ? 'heart' : 'skull';
+        
+        // Iterate through all children of this container
+        this.list.forEach((child: any) => {
+            // Check if it's the specific bad-item-icon we labeled earlier
+            if (child.getData && child.getData('name') === 'bad-item-icon') {
+                
+                // 1. Swap the texture
+                child.setTexture(newTexture);
+
+                // 2. Add a small visual "pop" so the player notices the shift
+                this.scene.tweens.add({
+                    targets: child,
+                    scale: child.scale * 1.3,
+                    duration: 200,
+                    yoyo: true,
+                    ease: 'Back.easeOut'
+                });
+                
+                // 3. Optional: Change alpha to make 'hearts' more enticing
+                child.setAlpha(isPossessed ? 0.6 : 0.2);
+            }
+        });
     }
 }

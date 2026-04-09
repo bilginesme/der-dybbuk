@@ -64,6 +64,7 @@ export default class PreloaderScene extends Phaser.Scene {
         this.load.image('gem-green', 'assets/images/board/gem-green.png');
         this.load.image('gem-red', 'assets/images/board/gem-red.png');
         this.load.image('skull', 'assets/images/board/skull.png');
+        this.load.image('heart', 'assets/images/board/heart.png');
         this.load.image('pawn', 'assets/images/board/pawn.png');
         this.load.spritesheet('stones-atlas', 'assets/images/board/stones-atlas.png', { frameWidth: 512, frameHeight: 512 });
         this.load.spritesheet('items-atlas', 'assets/images/board/items-atlas.png', { frameWidth: 256, frameHeight: 256 });

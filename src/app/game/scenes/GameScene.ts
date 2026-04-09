@@ -226,7 +226,7 @@ export class GameScene extends Phaser.Scene {
             this.audioManager.stopMusic();
             this.audioManager.playSFX('game-over');
 
-            this.time.delayedCall(1500, () => {
+            this.time.delayedCall(1000, () => {
                 this.scene.pause(); 
                 this.scene.start('GameOverScene', { score: 0, result: false });
             });
