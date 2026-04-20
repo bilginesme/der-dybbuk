@@ -174,6 +174,9 @@ export default class UpperPart extends Phaser.GameObjects.Container {
     }
 
     public playTheDice(diceResult: number) {
+        this.emit('pawn-movement-started'); 
+        this.isPawnMoving = true;
+        
         const movementPath: { x: number, y: number }[] = [];
         let currentId = this.pawnLocation;
 
@@ -219,7 +222,7 @@ export default class UpperPart extends Phaser.GameObjects.Container {
         return undefined;
     }
 
-    public movePawn(points: { x: number, y: number }[]): void {
+     public movePawn(points: { x: number, y: number }[]): void {
         // 1. Base Case: No more points to move to
         if (points.length === 0) {
             this.handleAfterMovePawnComplete();
@@ -279,7 +282,7 @@ export default class UpperPart extends Phaser.GameObjects.Container {
             }
 
             if(canTakeIt) {
-                this.emit('pawn-movement-complete', item); 
+                //this.emit('pawn-movement-complete', item); 
                 this.itemSpriteMap.delete(stoneId);
                 const swayDistance = 40; // Pixels to the left and right
 
@@ -359,6 +362,8 @@ export default class UpperPart extends Phaser.GameObjects.Container {
                 
             }// When steppon on evil spots
         }
+
+        this.emit('pawn-movement-complete', item); 
 
         if(this.theScene.isPossessedNow()) {
             this.gemLeft.setTexture('gem-red');

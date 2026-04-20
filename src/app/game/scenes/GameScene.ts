@@ -60,20 +60,24 @@ export class GameScene extends Phaser.Scene {
         this.upperPart = new UpperPart(this, 0, 0);
         this.board = new Board(this, 0, 300, this.audioManager);
         this.board.on('pawn-movement-complete', (item:ItemData) => {
-            if(item.nature == ItemNature.GOOD || item.nature == ItemNature.HEALER) {
-                this.openOneRandomPlayCard(false);
-                this.possessionManager.slowDwonPossession();
+            if(item) {
+                if(item.nature == ItemNature.GOOD || item.nature == ItemNature.HEALER) {
+                    this.openOneRandomPlayCard(false);
+                    this.possessionManager.slowDwonPossession();
+                }
+
+                this.possessionManager.updateScore(item.possessionImpact);
+                this.scoreBoard.updateScore(this.possessionManager);
             }
-            this.possessionManager.updateScore(item.possessionImpact);
-            this.scoreBoard.updateScore(this.possessionManager);
+            this.playCards.sendMessagePawnMovementCompleted();
+        });
+        this.board.on('pawn-movement-started', () => {
+            this.playCards.sendMessagePawnMovementStarted();
         });
         this.board.on('left-corner-clicked', () => {
-            console.log('Left clicked');
             this.restartGame();
         });
         this.board.on('right-corner-clicked', () => {
-            console.log('Right clicked');
-
             // test the sunken toggle
             this.board.toggleSunkenStones();
         });
@@ -231,8 +235,6 @@ export class GameScene extends Phaser.Scene {
                 this.scene.start('GameOverScene', { score: 0, result: false });
             });
         }
-
-        console.log('Possession : ' + isOver);
     }
 
     public isPossessedNow():boolean {

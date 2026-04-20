@@ -128,4 +128,12 @@ export default class PlayCards extends Phaser.GameObjects.Container {
             }
         }
     }
+
+    public sendMessagePawnMovementCompleted(): void {
+        this.dice.sendMessagePawnMovementCompleted();    
+    }
+
+    public sendMessagePawnMovementStarted(): void {
+        this.dice.sendMessagePawnMovementStarted();    
+    }
 }
